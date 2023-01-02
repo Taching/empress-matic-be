@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id   String @id @default(uuid())
-  name String
+  name String @unique
 
   password String
   role     RoleEnumType? @default(STAFF)
@@ -24,7 +24,7 @@ model User {
 }
 
 model Customer {
-  id          String  @id @default(uuid())
+  id          Int     @id @default(autoincrement())
   name        String
   address     String
   phoneNumber Int
@@ -32,54 +32,54 @@ model Customer {
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
-  operator   User     @relation(references: [id], onDelete: Cascade, fields: [userId])
-  operatorId Int
-  customer   Customer @relation(fields: [customerId], references: [id])
-  paid Boolean @default(false)
-  unit      UnitEnumType?
+  id       Int           @id @default(autoincrement())
+  user     User          @relation(references: [name], onDelete: Cascade, fields: [userId])
+  customer Customer      @relation(references: [id], fields: [customerId])
+  paid     Boolean       @default(false)
+  unit     UnitEnumType?
 
-  kilos Int
-  wash Int
-  dry Int
-  fold Int
-  liquidsoap Int
-  cellophane Int
+  kilos         Int
+  wash          Int
+  dry           Int
+  fold          Int
+  liquidsoap    Int
+  cellophane    Int
   pickupdeliver Int
-
 
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
   userId     String
-  customerId String
+  customerId Int
 }
-model Inventory {
-  id         Int      @id @default(autoincrement())
-  liquidsoap Int
-  fabcon Int
-  mollato Int
-  gallardo Int
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+model Inventory {
+  id         Int @id @default(autoincrement())
+  liquidsoap Int
+  fabcon     Int
+  mollato    Int
+  gallardo   Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Prices {
-  id         Int      @id @default(autoincrement())
-  wash Int
-  dry Int
-  fold Int
-  fabcon Int
+  id         Int @id @default(autoincrement())
+  wash       Int
+  dry        Int
+  fold       Int
+  fabcon     Int
   cellophane Int
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 enum UnitEnumType {
   GALLARDO
   MOLATO
 }
+
 enum RoleEnumType {
   STAFF
   ADMIN
