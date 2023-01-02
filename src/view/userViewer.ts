@@ -4,7 +4,8 @@ export default function userViewer(user: User, token: string) {
   const userView = {
     user: {
       token: token,
-      username: user.name,
+      name: user.name,
+      role: user.role,
     },
   };
   return userView;

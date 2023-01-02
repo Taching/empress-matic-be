@@ -19,16 +19,14 @@ export default async function userLogin(
     // Get the user with given email
     const getUser = await userGetPrisma(username);
     if (!getUser) return res.sendStatus(404);
-
     // Compare the user password given with the one stored
-    console.log(password, getUser.password);
     if (!compareWithHash(password, getUser.password)) return res.sendStatus(403);
 
     // Create the user token for future authentication
     const token = createUserToken(username);
 
     // Create the user view containing the authentication token
-    const userView = userViewer(username, token);
+    const userView = userViewer(getUser, token);
 
     return res.json(userView);
   } catch (error) {

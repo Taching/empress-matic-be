@@ -27,7 +27,7 @@ model Customer {
   id          String  @id @default(uuid())
   name        String
   address     String
-  phoneNumber String
+  phoneNumber Int
   order       Order[]
 }
 
