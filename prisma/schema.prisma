@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id   String @id @default(uuid())
+  name String
+
+  password String
+  role     RoleEnumType? @default(STAFF)
+
+  orders Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id          String  @id @default(uuid())
+  name        String
+  address     String
+  phoneNumber String
+  order       Order[]
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  operator   User     @relation(references: [id], onDelete: Cascade, fields: [userId])
+  operatorId Int
+  customer   Customer @relation(fields: [customerId], references: [id])
+  paid Boolean @default(false)
+  unit      UnitEnumType?
+
+  kilos Int
+  wash Int
+  dry Int
+  fold Int
+  liquidsoap Int
+  cellophane Int
+  pickupdeliver Int
+
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+  userId     String
+  customerId String
+}
+model Inventory {
+  id         Int      @id @default(autoincrement())
+  liquidsoap Int
+  fabcon Int
+  mollato Int
+  gallardo Int
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+model Prices {
+  id         Int      @id @default(autoincrement())
+  wash Int
+  dry Int
+  fold Int
+  fabcon Int
+  cellophane Int
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+}
+
+enum UnitEnumType {
+  GALLARDO
+  MOLATO
+}
+enum RoleEnumType {
+  STAFF
+  ADMIN
+}
