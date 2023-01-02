@@ -27,7 +27,7 @@ export default async function userLoginValidator(
     return res.status(400).json({ errors });
   }
 
-  const { password, name } = user;
+  const { password, username } = user;
 
   if (!password) {
     errors.body.push("password property in user can't be empty");
@@ -35,10 +35,10 @@ export default async function userLoginValidator(
     errors.body.push("password property in user must be a string");
   }
 
-  if (!name) {
-    errors.body.push("name property in user can't be empty");
-  } else if (typeof name != "string") {
-    errors.body.push("name property in user must be a string");
+  if (!username) {
+    errors.body.push("username property in user can't be empty");
+  } else if (typeof username != "string") {
+    errors.body.push("username property in user must be a string");
   }
 
   if (errors.body.length) return res.status(400).json({ errors });
